@@ -201,43 +201,13 @@ class EMGController(Sofa.Core.Controller):
 
             self.last_state = emg_state
 
-        if emg_state == "HIGH":
-            grip_state = "GRASPING"
-        else:
-            grip_state = "OPEN"
-
-        if emg_state == "HIGH":
-            grip_state = "GRASPING"
-        else:
-            grip_state = "OPEN"
+        grip_state = "GRASPING" if emg_state == "HIGH" else "OPEN"
 
         self.statusLabel.label = f"EMG: {emg_state}"
         self.rmsLabel.label = f"RMS: {rms:.3f}"
         self.pressureLabel.label = f"PRESSURE: {self.pressure:.2f}"
         self.gripLabel.label = f"GRIP: {grip_state}"
                 # -----------------------------
-        # RECORD EXPERIMENT DATA
-        # -----------------------------
-
-        cube_position = self.cubeMO.position.value[0]
-
-        cube_x = cube_position[0]
-        cube_y = cube_position[1]
-        cube_z = cube_position[2]
-
-        self.data_log.append([
-            round(self.emg_time, 3),
-            round(rms, 4),
-            emg_state,
-            round(self.pressure, 4),
-            grip_state,
-            round(cube_x, 3),
-            round(cube_y, 3),
-            round(cube_z, 3)
-        ])
-
-        # Save automatically after the 10-second EMG experiment
-        # -----------------------------
         # RECORD EXPERIMENT DATA
         # -----------------------------
 
