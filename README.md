@@ -49,3 +49,28 @@ Synthetic EMG → RMS Processing → EMG Classification → Adaptive Pressure �
                        │
                        ▼
               Virtual Object Grasping
+
+## Implementation details and limitations
+
+The current controller generates a **synthetic** EMG-like waveform in the SOFA animation loop; it does not acquire live sEMG from electrodes or an EMG amplifier. The signal uses a 20 Hz carrier with staged amplitude levels and added noise. A 100 ms RMS window is used to estimate activity, followed by threshold-based LOW / MEDIUM / HIGH classification with hysteresis.
+
+The pressure command mapping in the simulation is:
+
+| Classified state | Pressure command |
+|---|---:|
+| LOW | 0.00 |
+| MEDIUM | 0.25 |
+| HIGH | 0.40 |
+
+The SOFA scene contains a three-finger PneuNet model and a virtual object. Experiment logging records time, RMS, classified state, pressure command, grip state and virtual cube position.
+
+**Interpretation:** this is a simulation proof of concept for the signal-processing-to-actuation pipeline. The pressure values are simulation commands, not calibrated pneumatic pressures. No physical soft gripper, pneumatic supply, electrode interface or live EMG acquisition is claimed by this repository.
+
+### Next validation steps
+
+1. Replace the synthetic waveform with recorded or live EMG after adding an isolated, appropriately conditioned acquisition interface.
+2. Establish subject/session-separated calibration and thresholds rather than relying on fixed synthetic-signal levels.
+3. Validate pressure-to-finger deformation in SOFA and document solver settings and material assumptions.
+4. Compare grasp outcomes across repeatable object sizes and masses.
+5. Only describe a physical prototype after hardware and pneumatic tests have been completed and documented.
+
